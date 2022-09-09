@@ -1,3 +1,5 @@
+""" Functions for gathering the state of subreddits
+"""
 import json
 import os
 from pathlib import Path
@@ -11,7 +13,13 @@ from reddit_delta.exc import NoPriorStateException
 from reddit_delta.models import PostListPage, PostList
 
 
-def get_listing_page(base_url, subreddit: str, after: Optional[str] = None):
+def get_listing_page(base_url: str, subreddit: str, after: Optional[str] = None) -> PostListPage:
+    """ Retrieves a list of posts from the given subreddit
+
+    :param base_url: base url of the reddit instance to query
+    :param subreddit: name of the subreddit to use
+    :param after: last seen post (used for pagination)
+    """
     url = urljoin(base_url, f"r/{subreddit}.json")
     params = {"after": after} if after else None
     headers = {"User-Agent": "reddit delta coding-test"}
@@ -21,7 +29,13 @@ def get_listing_page(base_url, subreddit: str, after: Optional[str] = None):
     return PostListPage.parse_obj(response.json())
 
 
-def get_top_posts(base_url, subreddit, num_posts):
+def get_top_posts(base_url: str, subreddit: str, num_posts: int) -> PostList:
+    """ Pulls the top posts from a subreddit
+    
+    :param base_url: base url of the reddit instance to query
+    :param subreddit: name of the subreddit to use
+    :param num_posts: number of posts to pull
+    """
     posts = []
     after = None
 
@@ -37,7 +51,13 @@ def get_top_posts(base_url, subreddit, num_posts):
     return PostList(after=posts[-1].data.name, children=posts)
 
 
-def load_state(state_dir, subreddit):
+def load_state(state_dir: str, subreddit: str) -> PostList:
+    """ Retrieves the last saved state for a subreddit.
+
+    :param state_dir: directory where state is stored.
+    :param subreddit: subreddit to load state for
+    :return: PostList instance
+    """
     state_file = Path(state_dir) / f"{subreddit}.json"
     if not state_file.exists():
         raise NoPriorStateException
@@ -45,13 +65,25 @@ def load_state(state_dir, subreddit):
         return PostList.parse_obj(json.load(fd))
 
 
-def save_state(state_dir, subreddit, state: PostList):
+def save_state(state_dir: str, subreddit: str, state: PostList):
+    """ Persists state into `state_dir`
+
+    :param state_dir: directory where state is stored.
+    :param subreddit: subreddit to load state for
+    :param state: PostList instance to save
+    """
     state_file = os.path.join(state_dir, f"{subreddit}.json")
     with open(state_file, "wt") as fd:
         json.dump(state.dict(), fd)
 
 
-def validate_state(state, num_posts):
+def validate_state(state: PostList, num_posts: int) -> PostList:
+    """ Validates state, mainly checking that num_posts matches the number of child posts.
+
+    :param state:
+    :param num_posts:
+    :return:
+    """
     if num_posts > len(state.children):
         rich_print(
             f"[bold red]Post count mismatch (old: {len(state.children)}, current: {num_posts}).[/bold red]"
