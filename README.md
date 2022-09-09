@@ -28,6 +28,14 @@ pip install .
 poetry run pytest ./tests
 ```
 
+## Available Improvements
+
+- Needs a sane retry policy for HTTP request (currently exits after one try).
+- Increase test coverage, obviously two tests isn't very good coverage at all.
+- If you increase the value passed for the `--num-posts` option, the script currently invalidates the cache and treats 
+it like the first run.  This could be handled more gracefully.
+- Disturbing lack of docstrings
+
 ## Usage
 
 ```
@@ -54,3 +62,4 @@ poetry run pytest ./tests
 ## Example output
 
 ![Example output](docs/output.png)
+ 
