@@ -7,7 +7,6 @@ from typing import Optional
 from urllib.parse import urljoin
 
 import requests
-from rich import print as rich_print
 
 from reddit_delta.exc import NoPriorStateException
 from reddit_delta.models import PostListPage, PostList
@@ -80,24 +79,15 @@ def save_state(state_dir: str, subreddit: str, state: PostList):
 
 
 def validate_state(state: PostList, num_posts: int) -> PostList:
-    """Validates state, mainly checking that num_posts matches the number of child posts.
+    """Validates state
+
+    mainly ensuring state has *at most* `num_posts` children.
 
     :param state:
     :param num_posts:
     :return:
     """
-    if num_posts > len(state.children):
-        rich_print(
-            f"[bold red]Post count mismatch (old: {len(state.children)}, current: {num_posts}).[/bold red]"
-        )
-        rich_print(f"[bold red]Discarding prior state.[/bold red]")
-        state = PostList(children=[])
-
-    elif num_posts < len(state.children):
-        rich_print(
-            f"[bold red]Post count mismatch (old: {len(state.children)}, current: {num_posts}).[/bold red]"
-        )
-        rich_print(f"[bold red]Truncating prior state.[/bold red]")
+    if num_posts < len(state.children):
         state = state.copy(update={"children": state.children[:num_posts]})
 
     return state

@@ -32,9 +32,7 @@ poetry run pytest ./tests
 
 - Needs a sane retry policy for HTTP request (currently exits after one try).
 - Increase test coverage, obviously two tests isn't very good coverage at all.
-- If you increase the value passed for the `--num-posts` option, the script currently invalidates the cache and treats 
-it like the first run.  This could be handled more gracefully.
-- docstrings could be improved
+- Improve docstrings
 
 ## Usage
 
