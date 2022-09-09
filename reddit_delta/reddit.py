@@ -13,8 +13,10 @@ from reddit_delta.exc import NoPriorStateException
 from reddit_delta.models import PostListPage, PostList
 
 
-def get_listing_page(base_url: str, subreddit: str, after: Optional[str] = None) -> PostListPage:
-    """ Retrieves a list of posts from the given subreddit
+def get_listing_page(
+    base_url: str, subreddit: str, after: Optional[str] = None
+) -> PostListPage:
+    """Retrieves a list of posts from the given subreddit
 
     :param base_url: base url of the reddit instance to query
     :param subreddit: name of the subreddit to use
@@ -30,8 +32,8 @@ def get_listing_page(base_url: str, subreddit: str, after: Optional[str] = None)
 
 
 def get_top_posts(base_url: str, subreddit: str, num_posts: int) -> PostList:
-    """ Pulls the top posts from a subreddit
-    
+    """Pulls the top posts from a subreddit
+
     :param base_url: base url of the reddit instance to query
     :param subreddit: name of the subreddit to use
     :param num_posts: number of posts to pull
@@ -52,7 +54,7 @@ def get_top_posts(base_url: str, subreddit: str, num_posts: int) -> PostList:
 
 
 def load_state(state_dir: str, subreddit: str) -> PostList:
-    """ Retrieves the last saved state for a subreddit.
+    """Retrieves the last saved state for a subreddit.
 
     :param state_dir: directory where state is stored.
     :param subreddit: subreddit to load state for
@@ -66,7 +68,7 @@ def load_state(state_dir: str, subreddit: str) -> PostList:
 
 
 def save_state(state_dir: str, subreddit: str, state: PostList):
-    """ Persists state into `state_dir`
+    """Persists state into `state_dir`
 
     :param state_dir: directory where state is stored.
     :param subreddit: subreddit to load state for
@@ -78,7 +80,7 @@ def save_state(state_dir: str, subreddit: str, state: PostList):
 
 
 def validate_state(state: PostList, num_posts: int) -> PostList:
-    """ Validates state, mainly checking that num_posts matches the number of child posts.
+    """Validates state, mainly checking that num_posts matches the number of child posts.
 
     :param state:
     :param num_posts:

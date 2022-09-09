@@ -7,7 +7,7 @@ from reddit_delta.models import PostList
 
 
 def format_delta_value(old_value: int, new_value: int) -> str:
-    """ Compares to ints and returns a formatted string describing the difference."""
+    """Compares to ints and returns a formatted string describing the difference."""
     if old_value > new_value:
         return f"{new_value} ([red]-{old_value - new_value}[/red])"
     elif old_value < new_value:
@@ -17,8 +17,7 @@ def format_delta_value(old_value: int, new_value: int) -> str:
 
 
 def generate_delta_report(subreddit: str, old_posts: PostList, new_posts: PostList):
-    """ Prints a subreddit delta report to the console
-    """
+    """Prints a subreddit delta report to the console"""
     old_order = [post.data.name for post in old_posts.children]
     new_order = [post.data.name for post in new_posts.children]
     old_by_name = {post.data.name: post for post in old_posts.children}
